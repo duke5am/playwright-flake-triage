@@ -1,0 +1,880 @@
+{
+  "config": {
+    "argv": [
+      "node",
+      "node_modules/@playwright/test/cli.js",
+      "test"
+    ],
+    "configFile": "/repo/playwright.config.mjs",
+    "rootDir": "/repo/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/repo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/repo/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reports/run-07.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 4,
+    "webServer": {
+      "command": "node app/server.mjs 4321",
+      "url": "http://127.0.0.1:4321/health",
+      "reuseExistingServer": false,
+      "timeout": 20000,
+      "stdout": "ignore",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "animation.spec.mjs",
+      "file": "animation.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "applies the filter",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2145,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 1200ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#apply')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"apply\" class=\"pulsing\">Apply filter</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not stable\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not stable\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 1200ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#apply')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"apply\" class=\"pulsing\">Apply filter</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not stable\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not stable\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n    at /repo/specs/animation.spec.mjs:29:32",
+                    "location": {
+                      "file": "/repo/specs/animation.spec.mjs",
+                      "column": 32,
+                      "line": 29
+                    },
+                    "snippet": "  27 | test('applies the filter', async ({ page }) => {\n  28 |   await page.goto('/');\n> 29 |   await page.locator('#apply').click({ timeout: 1200 });\n     |                                ^\n  30 |   await expect(page.locator('#apply')).not.toHaveClass(/pulsing/);\n  31 | });\n  32 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/repo/specs/animation.spec.mjs",
+                        "column": 32,
+                        "line": 29
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 1200ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#apply')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"apply\" class=\"pulsing\">Apply filter</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not stable\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not stable\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n  27 | test('applies the filter', async ({ page }) => {\n  28 |   await page.goto('/');\n> 29 |   await page.locator('#apply').click({ timeout: 1200 });\n     |                                ^\n  30 |   await expect(page.locator('#apply')).not.toHaveClass(/pulsing/);\n  31 | });\n  32 |\n    at /repo/specs/animation.spec.mjs:29:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:02.003Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/repo/test-results/animation-applies-the-filter-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/repo/specs/animation.spec.mjs",
+                    "column": 32,
+                    "line": 29
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9a17ae2f643233d25b5a-b4f3aa171ee226657366",
+          "file": "animation.spec.mjs",
+          "line": 27,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "contention.spec.mjs",
+      "file": "contention.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "reads the report (1)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 818,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:01.767Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ec9b4be28f79073aa715-d26d5684a88f3d7254f9",
+          "file": "contention.spec.mjs",
+          "line": 35,
+          "column": 3
+        },
+        {
+          "title": "reads the report (2)",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "failed",
+                  "duration": 52,
+                  "error": {
+                    "message": "Error: report API said: database is locked\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: report API said: database is locked\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /repo/specs/contention.spec.mjs:38:69",
+                    "location": {
+                      "file": "/repo/specs/contention.spec.mjs",
+                      "column": 69,
+                      "line": 38
+                    },
+                    "snippet": "  36 |     const response = await request.get('/api/report');\n  37 |     const body = await response.json();\n> 38 |     expect(body.ok, `report API said: ${body.error ?? 'no error'}`).toBe(true);\n     |                                                                     ^\n  39 |   });\n  40 | }\n  41 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/repo/specs/contention.spec.mjs",
+                        "column": 69,
+                        "line": 38
+                      },
+                      "message": "Error: report API said: database is locked\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  36 |     const response = await request.get('/api/report');\n  37 |     const body = await response.json();\n> 38 |     expect(body.ok, `report API said: ${body.error ?? 'no error'}`).toBe(true);\n     |                                                                     ^\n  39 |   });\n  40 | }\n  41 |\n    at /repo/specs/contention.spec.mjs:38:69"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:01.820Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/repo/test-results/contention-reads-the-report-2--chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/repo/specs/contention.spec.mjs",
+                    "column": 69,
+                    "line": 38
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ec9b4be28f79073aa715-b5b3f881b6dcc20d49e7",
+          "file": "contention.spec.mjs",
+          "line": 35,
+          "column": 3
+        },
+        {
+          "title": "reads the report (3)",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "failed",
+                  "duration": 48,
+                  "error": {
+                    "message": "Error: report API said: database is locked\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: report API said: database is locked\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /repo/specs/contention.spec.mjs:38:69",
+                    "location": {
+                      "file": "/repo/specs/contention.spec.mjs",
+                      "column": 69,
+                      "line": 38
+                    },
+                    "snippet": "  36 |     const response = await request.get('/api/report');\n  37 |     const body = await response.json();\n> 38 |     expect(body.ok, `report API said: ${body.error ?? 'no error'}`).toBe(true);\n     |                                                                     ^\n  39 |   });\n  40 | }\n  41 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/repo/specs/contention.spec.mjs",
+                        "column": 69,
+                        "line": 38
+                      },
+                      "message": "Error: report API said: database is locked\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  36 |     const response = await request.get('/api/report');\n  37 |     const body = await response.json();\n> 38 |     expect(body.ok, `report API said: ${body.error ?? 'no error'}`).toBe(true);\n     |                                                                     ^\n  39 |   });\n  40 | }\n  41 |\n    at /repo/specs/contention.spec.mjs:38:69"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:01.941Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/repo/test-results/contention-reads-the-report-3--chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/repo/specs/contention.spec.mjs",
+                    "column": 69,
+                    "line": 38
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ec9b4be28f79073aa715-3ab3a0ed45c501ee6208",
+          "file": "contention.spec.mjs",
+          "line": 35,
+          "column": 3
+        },
+        {
+          "title": "reads the report (4)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 851,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:03.838Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ec9b4be28f79073aa715-18fcfc9b235ea4e3f09c",
+          "file": "contention.spec.mjs",
+          "line": 35,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "network.spec.mjs",
+      "file": "network.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "saves the draft",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 3,
+                  "status": "failed",
+                  "duration": 2167,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m504\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m504\u001b[39m\n    at /repo/specs/network.spec.mjs:32:29",
+                    "location": {
+                      "file": "/repo/specs/network.spec.mjs",
+                      "column": 29,
+                      "line": 32
+                    },
+                    "snippet": "  30 |     page.evaluate(() => fetch('/api/save', { method: 'POST' })),\n  31 |   ]);\n> 32 |   expect(response.status()).toBe(200);\n     |                             ^\n  33 | });\n  34 |\n  35 | test('waits for the save response', async ({ page }) => {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/repo/specs/network.spec.mjs",
+                        "column": 29,
+                        "line": 32
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m504\u001b[39m\n\n  30 |     page.evaluate(() => fetch('/api/save', { method: 'POST' })),\n  31 |   ]);\n> 32 |   expect(response.status()).toBe(200);\n     |                             ^\n  33 | });\n  34 |\n  35 | test('waits for the save response', async ({ page }) => {\n    at /repo/specs/network.spec.mjs:32:29"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:03.809Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/repo/test-results/network-saves-the-draft-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/repo/specs/network.spec.mjs",
+                    "column": 29,
+                    "line": 32
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4eda1819165dc031e011-34ac6649955c4a9a6533",
+          "file": "network.spec.mjs",
+          "line": 26,
+          "column": 1
+        },
+        {
+          "title": "waits for the save response",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 492,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:02.721Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4eda1819165dc031e011-0b553510cb18619bb687",
+          "file": "network.spec.mjs",
+          "line": 35,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "nondeterministic.spec.mjs",
+      "file": "nondeterministic.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "sorts products by price",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 691,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:03.804Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8335807616fae96c727b-2c1100e785bac7d8bf80",
+          "file": "nondeterministic.spec.mjs",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "shows a fresh timestamp",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 403,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:04.555Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8335807616fae96c727b-d944f7f7cb63ee095656",
+          "file": "nondeterministic.spec.mjs",
+          "line": 32,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "order-a.spec.mjs",
+      "file": "order-a.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "shows the two reservations this file created",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 468,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:04.912Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ac5f9be35fbdea4ebd7b-5e25a210b8000c98b440",
+          "file": "order-a.spec.mjs",
+          "line": 33,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "order-b.spec.mjs",
+      "file": "order-b.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "shows only the three reservations this file created",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 699,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:06.512Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "86d3cda9eacc0d7f4321-a44da1e3d77236a382e4",
+          "file": "order-b.spec.mjs",
+          "line": 23,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "race.spec.mjs",
+      "file": "race.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "sees the promo banner",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "failed",
+                  "duration": 1038,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#promo')\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#promo')\u001b[22m\n\n    at /repo/specs/race.spec.mjs:30:32",
+                    "location": {
+                      "file": "/repo/specs/race.spec.mjs",
+                      "column": 32,
+                      "line": 30
+                    },
+                    "snippet": "  28 |   // somewhere in the first 1.2s. A 500ms action timeout therefore lands on both\n  29 |   // sides of the boundary across runs.\n> 30 |   await page.locator('#promo').click({ timeout: 500 });\n     |                                ^\n  31 | });\n  32 |\n  33 | test('basket badge updates without waiting', async ({ page }) => {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/repo/specs/race.spec.mjs",
+                        "column": 32,
+                        "line": 30
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#promo')\u001b[22m\n\n\n  28 |   // somewhere in the first 1.2s. A 500ms action timeout therefore lands on both\n  29 |   // sides of the boundary across runs.\n> 30 |   await page.locator('#promo').click({ timeout: 500 });\n     |                                ^\n  31 | });\n  32 |\n  33 | test('basket badge updates without waiting', async ({ page }) => {\n    at /repo/specs/race.spec.mjs:30:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:04.999Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/repo/test-results/race-sees-the-promo-banner-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/repo/specs/race.spec.mjs",
+                    "column": 32,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "848bc6eeb3d68c73ee80-e81fe11531e14906385f",
+          "file": "race.spec.mjs",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "basket badge updates without waiting",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 2,
+                  "status": "failed",
+                  "duration": 632,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\n    at /repo/specs/race.spec.mjs:38:17",
+                    "location": {
+                      "file": "/repo/specs/race.spec.mjs",
+                      "column": 17,
+                      "line": 38
+                    },
+                    "snippet": "  36 |   // Snapshot first, assert later: the value may be taken before the app updates.\n  37 |   const badge = await page.locator('#count').textContent();\n> 38 |   expect(badge).toBe('1');\n     |                 ^\n  39 | });\n  40 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/repo/specs/race.spec.mjs",
+                        "column": 17,
+                        "line": 38
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\n\n  36 |   // Snapshot first, assert later: the value may be taken before the app updates.\n  37 |   const badge = await page.locator('#count').textContent();\n> 38 |   expect(badge).toBe('1');\n     |                 ^\n  39 | });\n  40 |\n    at /repo/specs/race.spec.mjs:38:17"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:06.087Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/repo/test-results/race-basket-badge-updates-without-waiting-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/repo/specs/race.spec.mjs",
+                    "column": 17,
+                    "line": 38
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "848bc6eeb3d68c73ee80-a6122e0241f0d06b8ac5",
+          "file": "race.spec.mjs",
+          "line": 33,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "strict-mode.spec.mjs",
+      "file": "strict-mode.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "opens the first product",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 640,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:08.216Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "11230b03821a852e27d2-dd7d9084e34383b7babb",
+          "file": "strict-mode.spec.mjs",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "shows one tile per product",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 606,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:08.334Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "11230b03821a852e27d2-e14fe451af00dd80dff0",
+          "file": "strict-mode.spec.mjs",
+          "line": 28,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "timeout.spec.mjs",
+      "file": "timeout.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "renders the revenue chart",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 2500,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 912,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-16T21:24:08.371Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "793bb5fc518094ea0976-7971bbd4c731a10f6da0",
+          "file": "timeout.spec.mjs",
+          "line": 23,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-16T21:24:00.037Z",
+    "duration": 10209.929,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 6,
+    "flaky": 0
+  }
+}

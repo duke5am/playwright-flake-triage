@@ -1,0 +1,274 @@
+PLAYWRIGHT FLAKY TEST TRIAGE
+==============================================================================
+10 run(s) · 16 test(s) observed · 14 flaky · 0 consistently failing · 2 stable
+CI time burned by failed attempts and retries: 2m 12s
+Playwright 1.63.0 · workers 4 · retries 0
+Evidence-only runs (not counted in the rates): solo-order-a [solo], solo-order-b [solo], serial-workers1 [serial]
+
+READ THIS FIRST
+──────────────────────────────────────────────────────────────────────────────
+      • Every collected run had retries=0. Flakes are therefore only visible ACROSS runs. That
+      is the cleaner signal, but it means a single-run pipeline can never see them — see
+      docs/CI-SETUP.md.
+
+WHAT TO FIX FIRST
+──────────────────────────────────────────────────────────────────────────────
+  1. [strict-mode-violation · high] opens the first product  [chromium]
+     priority 80/100 · 60% flaky (6 failed, 0 pass-on-retry, 4 clean) · strict-mode.spec.mjs
+     evidence [rule]: R1 matched: error message matches /strict mode violation/
+     evidence [error message]: strict mode violation reported by Playwright
+     evidence [error message]: locator('.product-tile') matched 2 elements where exactly one was
+     required
+     evidence [run history]: 6 failed run(s), 0 run(s) that only passed on retry, 4 clean
+     pass(es)
+     fix: The locator matches more than one element. Narrow it (getByRole with an accessible
+     name, .first() only if the order is genuinely guaranteed) — the multi-match is usually an
+     app bug.
+     read: fixes/03-strict-mode-violation.md
+
+  2. [missing-await-race · high] basket badge updates without waiting  [chromium]
+     priority 72/100 · 80% flaky (8 failed, 0 pass-on-retry, 2 clean) · race.spec.mjs
+     evidence [rule]: R8 matched: failing source line has expect(...) without await or
+     expect(await ...), or assertion call log shows "unexpected value", or locator timeout with
+     element not found / not visible
+     evidence [code frame at the failing line]: `badge` was captured with `await
+     ...textContent()` on the line above and then asserted on: `expect(badge).toBe('1');` — the
+     value was read once, before the app had finished updating it
+     evidence [run history]: 8 failed run(s), 0 run(s) that only passed on retry, 2 clean
+     pass(es)
+     fix: Add the missing await or replace the non-retrying assertion with a web-first assertion
+     (expect(locator).toHaveText(...)) that retries until the UI settles.
+     read: fixes/02-missing-await-race.md
+
+  3. [missing-await-race · medium] sees the promo banner  [chromium]
+     priority 60.8/100 · 90% flaky (9 failed, 0 pass-on-retry, 1 clean) · race.spec.mjs
+     evidence [rule]: R8 matched: failing source line has expect(...) without await or
+     expect(await ...), or assertion call log shows "unexpected value", or locator timeout with
+     element not found / not visible
+     evidence [call log]: locator.click: Timeout 500ms exceeded — the locator never resolved to
+     an element in 9 of 9 failing attempt(s)
+     evidence [reasoning]: the element does appear in the runs where this test passed, so the
+     action ran before the UI produced it
+     evidence [run history]: 9 failed run(s), 0 run(s) that only passed on retry, 1 clean
+     pass(es)
+     fix: Add the missing await or replace the non-retrying assertion with a web-first assertion
+     (expect(locator).toHaveText(...)) that retries until the UI settles.
+     read: fixes/02-missing-await-race.md
+
+  4. [test-order-dependency · high] shows only the three reservations this file created  [chromium]
+     priority 56/100 · 40% flaky (4 failed, 0 pass-on-retry, 6 clean) · order-b.spec.mjs
+     evidence [rule]: R6 matched: passed in a solo/--grep run while failing in the suite, or
+     failure located in a hook (beforeAll/beforeEach/afterAll/afterEach)
+     evidence [run "solo-order-b"]: the test passed when run on its own
+     evidence [cross-run comparison]: the same test failed in 4 suite run(s): 2, 3, 4, 5
+     evidence [reasoning]: something another test does (or leaves behind) decides the outcome —
+     order, shared data, shared session, shared server state
+     evidence [run history]: 4 failed run(s), 0 run(s) that only passed on retry, 6 clean
+     pass(es)
+     ruled out: the assertion retried 13× and always saw the same value ("5") — a value that
+     never moves is a wrong expectation, not a race
+     also plausible: resource-contention (rule R9) — the test passed when the whole suite ran on
+     a single worker; the failing runs used workers=4; nothing in the error message explains the
+     failure, and the test stops failing when it stops competing for machine resources (CPU,
+     memory, ports, database connections, rate limits, temp files)
+     fix: It passes alone and fails in the suite: it is reading state another test wrote. Give
+     the test its own fixture/data and reset shared state per test.
+     read: fixes/06-test-order-dependency.md
+
+  5. [network-timing · high] waits for the save response  [chromium]
+     priority 56/100 · 40% flaky (4 failed, 0 pass-on-retry, 6 clean) · network.spec.mjs
+     evidence [rule]: R4 matched: net::ERR_/ECONNRESET/socket hang up/fetch failed/Request
+     failed, or waitForResponse / "waiting for event \"response\"" / apiRequestContext, or an
+     HTTP status code in the assertion diff
+     evidence [call log]: the test was waiting for a response matching **/api/save that never
+     arrived
+     evidence [reasoning]: the request either failed, was aborted, or the app never fired it
+     because an earlier step did not complete
+     evidence [run history]: 4 failed run(s), 0 run(s) that only passed on retry, 6 clean
+     pass(es)
+     also plausible: missing-await-race (rule R8) — page.waitForResponse: Timeout 800ms exceeded
+     — the locator never resolved to an element in 4 of 4 failing attempt(s); the element does
+     appear in the runs where this test passed, so the action ran before the UI produced it
+     fix: The failure is about a request or response. Await the response you depend on, assert
+     on it, and fail loudly — do not sleep and hope.
+     read: fixes/05-network-timing.md
+
+  6. [strict-mode-violation · medium] shows one tile per product  [chromium]
+     priority 52/100 · 30% flaky (3 failed, 0 pass-on-retry, 7 clean) · strict-mode.spec.mjs
+     evidence [rule]: R1 matched: error message matches /strict mode violation/
+     evidence [Expected/Received diff]: an element-count assertion wanted 1 and found 2 —
+     exactly 2× as many
+     evidence [reasoning]: the page rendered its elements more than once (duplicate render, an
+     effect that ran twice, a list appended to instead of replaced). The same cause produces
+     Playwright strict mode violations elsewhere. The alternative explanation — the underlying
+     data really changed between runs — is worth ruling out first.
+     evidence [run history]: 3 failed run(s), 0 run(s) that only passed on retry, 7 clean
+     pass(es)
+     ruled out: the assertion retried 14× and always saw the same value ("2") — a value that
+     never moves is a wrong expectation, not a race
+     also plausible: resource-contention (rule R9) — the test passed when the whole suite ran on
+     a single worker; the failing runs used workers=4; nothing in the error message explains the
+     failure, and the test stops failing when it stops competing for machine resources (CPU,
+     memory, ports, database connections, rate limits, temp files)
+     fix: The locator matches more than one element. Narrow it (getByRole with an accessible
+     name, .first() only if the order is genuinely guaranteed) — the multi-match is usually an
+     app bug.
+     read: fixes/03-strict-mode-violation.md
+
+  7. [network-timing · medium] saves the draft  [chromium]
+     priority 51.2/100 · 60% flaky (6 failed, 0 pass-on-retry, 4 clean) · network.spec.mjs
+     evidence [rule]: R4 matched: net::ERR_/ECONNRESET/socket hang up/fetch failed/Request
+     failed, or waitForResponse / "waiting for event \"response\"" / apiRequestContext, or an
+     HTTP status code in the assertion diff
+     evidence [Expected/Received diff]: HTTP status mismatch: expected 200 / received 503
+     evidence [reasoning]: the endpoint answered, but not with the status the test required
+     evidence [run history]: 6 failed run(s), 0 run(s) that only passed on retry, 4 clean
+     pass(es)
+     also plausible: resource-contention (rule R9) — the test passed when the whole suite ran on
+     a single worker; the failing runs used workers=4; nothing in the error message explains the
+     failure, and the test stops failing when it stops competing for machine resources (CPU,
+     memory, ports, database connections, rate limits, temp files)
+     fix: The failure is about a request or response. Await the response you depend on, assert
+     on it, and fail loudly — do not sleep and hope.
+     read: fixes/05-network-timing.md
+
+  8. [resource-contention · medium] reads the report (1)  [chromium]
+     priority 45.6/100 · 90% flaky (9 failed, 0 pass-on-retry, 1 clean) · contention.spec.mjs
+     evidence [rule]: R9 matched: the test passed in a serial run (workers=1) of the whole
+     suite, and no message-level rule matched
+     evidence [run "serial-workers1"]: the test passed when the whole suite ran on a single
+     worker
+     evidence [run config]: the failing runs used workers=4
+     evidence [reasoning]: nothing in the error message explains the failure, and the test stops
+     failing when it stops competing for machine resources (CPU, memory, ports, database
+     connections, rate limits, temp files)
+     evidence [run history]: 9 failed run(s), 0 run(s) that only passed on retry, 1 clean
+     pass(es)
+     fix: It only fails with parallel workers. Reduce shared resources per test (own
+     user/session/record), or isolate the resource-hungry file with test.describe.configure({
+     mode: "serial" }).
+     read: fixes/07-resource-contention.md
+
+  9. [resource-contention · medium] reads the report (2)  [chromium]
+     priority 43.2/100 · 80% flaky (8 failed, 0 pass-on-retry, 2 clean) · contention.spec.mjs
+     evidence [rule]: R9 matched: the test passed in a serial run (workers=1) of the whole
+     suite, and no message-level rule matched
+     evidence [run "serial-workers1"]: the test passed when the whole suite ran on a single
+     worker
+     evidence [run config]: the failing runs used workers=4
+     evidence [reasoning]: nothing in the error message explains the failure, and the test stops
+     failing when it stops competing for machine resources (CPU, memory, ports, database
+     connections, rate limits, temp files)
+     evidence [run history]: 8 failed run(s), 0 run(s) that only passed on retry, 2 clean
+     pass(es)
+     fix: It only fails with parallel workers. Reduce shared resources per test (own
+     user/session/record), or isolate the resource-hungry file with test.describe.configure({
+     mode: "serial" }).
+     read: fixes/07-resource-contention.md
+
+ 10. [nondeterministic-data · high] sorts products by price  [chromium]
+     priority 39/100 · 30% flaky (3 failed, 0 pass-on-retry, 7 clean) · nondeterministic.spec.mjs
+     evidence [rule]: R3 matched: snapshot assertion, or same-multiset-different-order diff, or
+     timestamp/uuid/relative-time diff, or float precision diff, or Date/Math.random/uuid on the
+     failing line
+     evidence [Expected/Received diff]: the diff removes and re-adds the exact same value(s)
+     ("Espresso…) — the values did not change, their position did
+     evidence [reasoning]: an unordered source (Set, Object.keys, an unsorted query, a shuffled
+     array) is being compared to a fixed order
+     evidence [run history]: 3 failed run(s), 0 run(s) that only passed on retry, 7 clean
+     pass(es)
+     fix: The comparison involves data that legitimately varies (order, timestamps, ids,
+     floats). Assert on the invariant, not the literal value.
+     read: fixes/08-nondeterministic-data.md
+
+ 11. [nondeterministic-data · medium] shows a fresh timestamp  [chromium]
+     priority 36/100 · 50% flaky (5 failed, 0 pass-on-retry, 5 clean) · nondeterministic.spec.mjs
+     evidence [rule]: R3 matched: snapshot assertion, or same-multiset-different-order diff, or
+     timestamp/uuid/relative-time diff, or float precision diff, or Date/Math.random/uuid on the
+     failing line
+     evidence [Expected/Received diff]: time-like values differ: expected ""just now"" /
+     received ""2 second ago""
+     evidence [reasoning]: a clock, timezone, locale or relative-time label is part of the
+     assertion
+     evidence [run history]: 5 failed run(s), 0 run(s) that only passed on retry, 5 clean
+     pass(es)
+     ruled out: the assertion retried 14× and always saw the same value (""2 second ago"") — a
+     value that never moves is a wrong expectation, not a race
+     fix: The comparison involves data that legitimately varies (order, timestamps, ids,
+     floats). Assert on the invariant, not the literal value.
+     read: fixes/08-nondeterministic-data.md
+
+ 12. [animation-transition · high] applies the filter  [chromium]
+     priority 36/100 · 80% flaky (8 failed, 0 pass-on-retry, 2 clean) · animation.spec.mjs
+     evidence [rule]: R2 matched: call log contains "element is not stable" or "intercepts
+     pointer events"
+     evidence [actionability call log]: element is not stable — its box moved between animation
+     frames
+     evidence [actionability call log]: Playwright retried the action 24 time(s) before timing
+     out
+     evidence [actionability call log]: target keeps moving: <button id="apply"
+     class="pulsing">Apply filter</button>
+     evidence [run history]: 8 failed run(s), 0 run(s) that only passed on retry, 2 clean
+     pass(es)
+     also plausible: missing-await-race (rule R8) — locator.click: Timeout 1200ms exceeded — the
+     element was found every time but never became actionable inside the budget (it was moving,
+     covered, disabled or still loading)
+     also plausible: resource-contention (rule R9) — the test passed when the whole suite ran on
+     a single worker; the failing runs used workers=4; nothing in the error message explains the
+     failure, and the test stops failing when it stops competing for machine resources (CPU,
+     memory, ports, database connections, rate limits, temp files)
+     fix: Wait for the element to be stable or for the animation to finish before acting
+     (expect(el).toHaveCSS or wait for the transition class to drop); do not click a moving
+     target.
+     read: fixes/04-animation-transition.md
+
+ 13. [resource-contention · medium] reads the report (3)  [chromium]
+     priority 31.2/100 · 30% flaky (3 failed, 0 pass-on-retry, 7 clean) · contention.spec.mjs
+     evidence [rule]: R9 matched: the test passed in a serial run (workers=1) of the whole
+     suite, and no message-level rule matched
+     evidence [run "serial-workers1"]: the test passed when the whole suite ran on a single
+     worker
+     evidence [run config]: the failing runs used workers=4
+     evidence [reasoning]: nothing in the error message explains the failure, and the test stops
+     failing when it stops competing for machine resources (CPU, memory, ports, database
+     connections, rate limits, temp files)
+     evidence [run history]: 3 failed run(s), 0 run(s) that only passed on retry, 7 clean
+     pass(es)
+     fix: It only fails with parallel workers. Reduce shared resources per test (own
+     user/session/record), or isolate the resource-hungry file with test.describe.configure({
+     mode: "serial" }).
+     read: fixes/07-resource-contention.md
+
+ 14. [timeout · high] renders the revenue chart  [chromium]
+     priority 30/100 · 50% flaky (5 failed, 0 pass-on-retry, 5 clean) · timeout.spec.mjs
+     evidence [rule]: R7 matched: result.status == "timedOut", or error message matches /Test
+     timeout of \d+ms exceeded/
+     evidence [result.status]: the attempt ended as timedOut, not as a failed assertion
+     evidence [error message]: the test used its whole 2500ms budget (per-test timeout 2500ms)
+     evidence [reasoning]: a timeout says "too slow", never "why". Read the call log above
+     before changing any number: what it was waiting for names the real cause.
+     evidence [run history]: 5 failed run(s), 0 run(s) that only passed on retry, 5 clean
+     pass(es)
+     also plausible: resource-contention (rule R9) — the test passed when the whole suite ran on
+     a single worker; the failing runs used workers=4; nothing in the error message explains the
+     failure, and the test stops failing when it stops competing for machine resources (CPU,
+     memory, ports, database connections, rate limits, temp files)
+     fix: Find out what the test was still waiting for in the call log. If it was waiting on a
+     locator, this is a race — fix the wait, do not raise the budget.
+     read: fixes/01-timeout.md
+
+BY CATEGORY
+──────────────────────────────────────────────────────────────────────────────
+  strict-mode-violation      2  severity 5/5  → fixes/03-strict-mode-violation.md
+  missing-await-race         2  severity 4/5  → fixes/02-missing-await-race.md
+  network-timing             2  severity 4/5  → fixes/05-network-timing.md
+  test-order-dependency      1  severity 4/5  → fixes/06-test-order-dependency.md
+  resource-contention        3  severity 3/5  → fixes/07-resource-contention.md
+  nondeterministic-data      2  severity 3/5  → fixes/08-nondeterministic-data.md
+  animation-transition       1  severity 2/5  → fixes/04-animation-transition.md
+  timeout                    1  severity 2/5  → fixes/01-timeout.md
+
+──────────────────────────────────────────────────────────────────────────────
+Priority = categorySeverity × confidenceWeight × (0.5 + 0.5 × flakeRate) × 20
+Classification is heuristic. "unknown" means the report lacked the deciding signal, not that the test is fine.
+Generated 2026-09-16T21:34:03.963Z by playwright-flaky-test-triage-kit/detect/report.mjs
