@@ -73,4 +73,4 @@ purpose so you can watch the classifier work; nine `fixes/` guides with
 wrong-and-right code and why the common fix (a hard sleep, or `retries: 3` to hide
 it) is harmful; the CI setup and quarantine-policy guides; and 104 tests.
 
-→ **Playwright Flaky Test Triage Kit**: <!-- GUMROAD-LINK -->
+→ More developer tooling like this: **[duke5am.gumroad.com](https://duke5am.gumroad.com)** <!-- GUMROAD-LINK -->
